@@ -6,11 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
-@ServletComponentScan(basePackages = "com.spring.springstudy")
+@ServletComponentScan(basePackages = "com.study.springstudy")
 public class Main {
     public static void main(String[] args) {
 
         SpringApplication.run(Main.class, args);
-        // http://localhost:8383/index.jsp
+        
     }
 }

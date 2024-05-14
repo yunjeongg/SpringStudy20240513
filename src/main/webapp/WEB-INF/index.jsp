@@ -8,5 +8,7 @@
 </head>
 <body>
   <h1>hello!!! JSP</h1>
+
+  <a href="/chap01/join">회원가입 하기</a>
 </body>
 </html>
