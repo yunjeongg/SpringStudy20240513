@@ -47,6 +47,8 @@
         <h1>커피 주문서</h1>
 
         <div class="menu">
+        <!-- method="get" 은 주소창에 다 뜨고, method="post" 는 숨겨짐 -->
+        <!-- 게시판 글 번호 등에는 정보가 뜨는 게 좋고 회원가입 등에는 정보를 숨기는 게 좋음 -->
             <form action="/coffee/result" method="post">
                 <label>
                     # 주문 목록 <br>
