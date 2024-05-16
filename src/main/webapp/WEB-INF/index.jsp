@@ -9,6 +9,10 @@
 <body>
   <h1>hello!!! JSP</h1>
 
-  <a href="/chap01/join">회원가입 하기</a>
+  <a href="/chap01/join">회원가입하기</a> <br>
+  <a href="/chap02/v1/join">회원가입하기(front v1)</a><br>
+  <a href="/chap02/v2/join">회원가입하기(front v2)</a><br>
+  <a href="/chap02/v3/join">회원가입하기(front v3)</a><br>
+  <a href="/chap02/v4/join">회원가입하기(front v4)</a>
 </body>
 </html>
