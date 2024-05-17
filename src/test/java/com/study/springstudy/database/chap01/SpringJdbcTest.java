@@ -1,19 +1,33 @@
 package com.study.springstudy.database.chap01;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
+@Rollback
 class SpringJdbcTest {
 
     @Autowired
     SpringJdbc springJdbc;
+
+    // 각 테스트 전에 공통으로 실행할 코드
+    @BeforeEach // 각각 테스트하기 전
+    void bulkInsert(){
+        for (int i = 0; i < 100; i++) {
+            Person p = new Person(i + 2000, "테스트맨" + 1, 10);
+            springJdbc.save(p);
+        }
+    }
 
     // 단위 테스트 프레임워크 : JUnit5
     // 테스트 == 단언 (Assertion)
