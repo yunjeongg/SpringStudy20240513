@@ -30,6 +30,10 @@ dependencies {
 
     // maria DB 커넥터 추가
     implementation 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
+
+    // Spring JDBC 모듈
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
 }
 
 tasks.named('test') {
