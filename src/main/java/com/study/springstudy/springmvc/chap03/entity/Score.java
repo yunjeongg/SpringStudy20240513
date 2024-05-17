@@ -5,7 +5,7 @@ import com.study.springstudy.springmvc.chap03.dto.ScorePostDTO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-// 역할: 데이터베이스의 테이블의 컬럼과 1대1로 매칭되는 필드를 가진 객체
+// 역할: 데이터베이스의 테이블의 컬럼과 1대1로 매칭되는 필드를 가진 객체, 자바빈즈, 레코드
 public class Score {
 
     private long stuNum;
