@@ -28,4 +28,3 @@ public class ScoreDetailResponseDto {
         this.totalCount = count;
     }
 }
-
