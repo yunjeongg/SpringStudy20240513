@@ -31,8 +31,13 @@ dependencies {
     // maria DB 커넥터 추가
     implementation 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
 
-    // Spring JDBC 모듈
+    // Spring JDBC 모듈 (MyBatis 사용하려면 jdbc 가 내장되어야 한다.)
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    // My Batis 모듈
+    // https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+
 
 }
 
