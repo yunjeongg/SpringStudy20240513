@@ -22,6 +22,8 @@ public class BoardListResponseDto {
     private String shortContent; // 30자 이상 줄임 처리된 글 내용
     private String date; // 포맷팅된 날짜문자열
     private int view; // 조회 수
+    private boolean hit; // HIT 게시물(조회수5 이상)인가? 여부
+    private boolean newArticle; // 새 게시물(1시간 이내)인가?
 
 
     // 엔터티를 DTO로 변환하는 생성자
@@ -31,6 +33,9 @@ public class BoardListResponseDto {
         this.shortContent = makeShortContent(b.getContent());
         this.date = dateFormatting(b.getRegDateTime());
         this.view = b.getViewCount();
+        this.hit = this.view > 5;
+        this.newArticle = LocalDateTime.now().isBefore(b.getRegDateTime().plusHours(5));
+        // 현재시간이 게시물등록 후 5분보다 이전인가?
     }
 
     private String dateFormatting(LocalDateTime regDateTime) {
