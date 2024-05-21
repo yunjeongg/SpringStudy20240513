@@ -12,10 +12,12 @@
     <!-- SELECT 조회결과를 담을 Entity 클래스 별칭 설정하기 -->
     <typeAliases>
         <typeAlias type="com.study.springstudy.database.chap01.Person" alias="person" />
+        <typeAlias type="com.study.springstudy.springmvc.chap03.entity.Score" alias="score" />
     </typeAliases>
 
     <!-- SQL 을 적어놓은 ..Mapper.xml 파일들을 사용등록하는 영역 -->
     <mappers>
         <mapper resource="mappers/PersonMapper.xml" />
+        <mapper resource="mappers/ScoreMapper.xml" />
     </mappers>
 </configuration>
