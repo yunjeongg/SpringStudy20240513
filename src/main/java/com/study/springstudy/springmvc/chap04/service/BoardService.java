@@ -1,6 +1,7 @@
 package com.study.springstudy.springmvc.chap04.service;
 
 import com.study.springstudy.springmvc.chap04.common.Page;
+import com.study.springstudy.springmvc.chap04.common.Search;
 import com.study.springstudy.springmvc.chap04.dto.BoardDetailResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardListResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardWriteRequestDto;
@@ -49,7 +50,7 @@ public class BoardService {
         return new BoardDetailResponseDto(b);
     }
 
-    public int getCount() {
-        return mapper.count();
+    public int getCount(Search search) {
+        return mapper.count(search);
     }
 }

@@ -18,8 +18,8 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
 
       <!-- bootstrap css -->
-      <!-- https://getbootstrap.com/ -->
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
       <link rel="stylesheet" href="/assets/css/main.css">
       <link rel="stylesheet" href="/assets/css/list.css">
@@ -41,11 +41,46 @@
           <button class="add-btn">새 글 쓰기</button>
         </div>
 
-        <div class="card-container">
 
-          <c:forEach var="b" items="${bList}">
+        <div class="top-section">
+          <!-- 검색창 영역 -->
+          <div class="search">
+            <form action="/board/list" method="get">
+
+              <select class="form-select" name="type" id="search-type">
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+                <option value="writer">작성자</option>
+                <option value="tc">제목+내용</option>
+              </select>
+
+              <input type="text" class="form-control" name="keyword" value="${s.keyword}">
+
+              <button class="btn btn-primary" type="submit">
+                <i class="fas fa-search"></i>
+              </button>
+
+            </form>
+          </div>
+
+          <div class="amount">
+            <div><a href="#">6</a></div>
+            <div><a href="#">18</a></div>
+            <div><a href="#">30</a></div>
+          </div>
+
+        </div>
+
+        <div class="card-container">
+          <c:if test="${bList.size() == 0}">
+            <div class="empty">
+              검색한 게시물이 존재하지 않습니다.
+            </div>
+          </c:if>
+
+          <c:if test="${bList.size() > 0}">
+            <c:forEach var="b" items="${bList}">
             <div class="card-wrapper">
-              <!-- 글번호 -->
               <section class="card" data-bno="${b.bno}">
                 <div class="card-title-wrapper">
                   <h2 class="card-title">${b.shortTitle}</h2>
@@ -74,7 +109,6 @@
                 </div>
               </section>
               <div class="card-btn-group">
-                <!-- 모달의 삭제 예 버튼 눌렀을 때 링크  -->
                 <button class="del-btn" data-href="/board/delete?bno=${b.bno}">
                   <i class="fas fa-times"></i>
                 </button>
@@ -82,6 +116,7 @@
             </div>
             <!-- end div.card-wrapper -->
           </c:forEach>
+          </c:if>
 
 
         </div>
@@ -90,44 +125,39 @@
         <!-- 게시글 목록 하단 영역 -->
         <div class="bottom-section">
 
-          
-
           <!-- 페이지 버튼 영역 -->
-          <!-- ctrl + shift + r 강력새로고침 -->
           <nav aria-label="Page navigation example">
             <ul class="pagination pagination-lg pagination-custom">
-              
+
               <c:if test="${maker.pageInfo.pageNo != 1}">
                 <li class="page-item">
-                  <a class="page-link" href="/board/list?pageNo=1"><<</a>
+                  <a class="page-link" href="/board/list?pageNo=1&type=${s.type}&keyword=${s.keyword}">&lt;&lt;</a>
                 </li>
               </c:if>
 
               <c:if test="${maker.prev}">
                 <li class="page-item">
-                  <a class="page-link" href="/board/list?pageNo=${maker.begin - 1}">prev</a>
+                  <a class="page-link" href="/board/list?pageNo=${maker.begin - 1}&type=${s.type}&keyword=${s.keyword}">prev</a>
                 </li>
               </c:if>
 
               <c:forEach var="i" begin="${maker.begin}" end="${maker.end}">
                 <li data-page-num="${i}" class="page-item">
-                  <a class="page-link" href="/board/list?pageNo=${i}">${i}</a>
+                  <a class="page-link" href="/board/list?pageNo=${i}&type=${s.type}&keyword=${s.keyword}">${i}</a>
                 </li>
               </c:forEach>
 
               <c:if test="${maker.next}">
                 <li class="page-item">
-                  <a class="page-link" href="/board/list?pageNo=${maker.end + 1}">next</a>
+                  <a class="page-link" href="/board/list?pageNo=${maker.end + 1}&type=${s.type}&keyword=${s.keyword}">next</a>
                 </li>
               </c:if>
 
               <c:if test="${maker.pageInfo.pageNo != maker.finalPage}">
                 <li class="page-item">
-                  <a class="page-link" href="/board/list?pageNo=${maker.finalPage}">>></a>
+                  <a class="page-link" href="/board/list?pageNo=${maker.finalPage}&type=${s.type}&keyword=${s.keyword}">&gt;&gt;</a>
                 </li>
               </c:if>
-
-
 
             </ul>
           </nav>
@@ -137,6 +167,7 @@
 
       </div>
       <!-- end div.wrap -->
+
 
       <!-- 모달 창 -->
       <div class="modal" id="modal">
@@ -167,8 +198,9 @@
             modal.style.display = 'flex'; // 모달 창 띄움
 
             const $delBtn = e.target.closest('.del-btn');
-            // 삭제 링크 주소 얻기
+            // 삭제 링크주소 얻기
             const deleteLocation = $delBtn.dataset.href;
+            console.log(deleteLocation);
 
             // 확인 버튼 이벤트
             confirmDelete.onclick = e => {
@@ -256,17 +288,33 @@
           console.log('현재페이지: ' + currentPage);
 
           // 2. 해당 페이지번호와 일치하는 li태그를 탐색한다.
-          // 자바스크립트 안에서 jsp문법 쓸 때는 \ 백슬레이스 붙여줘야 함
           const $li = document.querySelector(`.pagination li[data-page-num="\${currentPage}"]`);
 
           // 3. 해당 li태그에 class = active를 추가한다.
-          $li.classList.add('active');
+          //    $li 가 있을 경우 active 클래스를 추가한다.
+          // if ($li) $li.classList.add('active');
+          $li?.classList.add('active');
 
         }
 
+        // 기존 검색 조건 option태그 고정하기
+        function fixSearchOption() {
+
+          // 1. 방금 전에 어떤 조건을 검색했는지 값을 알아옴
+          const type = '${s.type}';
+          // console.log('type:' + type);
+
+          // 2. 해당 조건을 가진 option태그를 검색
+          const $option = document.querySelector(`#search-type option[value='\${type}']`);
+
+          // 3. 해당 태그에 selected 속성 부여
+          //    $option 이 null이 아니면 속성부여
+          // if ($option !== null ) $option.setAttribute('selected', 'selected');
+          $option?.setAttribute('selected', 'selected');
+        }
         appendActivePage();
-        
-        
+        fixSearchOption();
+
 
 
 

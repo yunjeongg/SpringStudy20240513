@@ -9,8 +9,33 @@
 <!-- namespace속성에는 사용할 인터페이스의 풀네임(패키지+인터페이스명)을 적음 -->
 <mapper namespace="com.study.springstudy.springmvc.chap04.mapper.BoardMapper">
 
+    <!--    동적 SQL 조건을 분리 -->
+    <sql id="search">
+        <if test="type == 'title'">
+            <!-- 제목이 해당키워드 -->
+            <!-- http://localhost:8383/board/list?type=title&keyword=호빵 -->
+            WHERE title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'content'">
+            WHERE content LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'writer'">
+            <!-- 작성자가 해당키워드 -->
+            <!-- http://localhost:8383/board/list?type=writer&keyword=폼폼푸린 -->
+            WHERE writer LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'tc'">
+            <!-- 제목 또는 내용에 해당키워드 -->
+            <!-- http://localhost:8383/board/list?type=tc&keyword=빵 -->
+            WHERE title LIKE CONCAT('%', #{keyword}, '%')
+            OR content LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </sql>
+
+    <!-- 동적SQL SQL이 실시간으로 바뀜 -->
     <select id="findAll" resultType="board">
         SELECT * FROM tbl_board
+        <include refid="search" />
         ORDER BY board_no DESC
         LIMIT #{pageStart}, #{amount}
     </select>
@@ -40,6 +65,7 @@
     <select id="count" resultType="int">
         SELECT COUNT(*)
         FROM tbl_board
+        <include refid="search" />
     </select>
 
 </mapper>
