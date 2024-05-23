@@ -8,6 +8,8 @@ import com.study.springstudy.springmvc.chap04.dto.BoardListResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardWriteRequestDto;
 import com.study.springstudy.springmvc.chap04.entity.Board;
 import com.study.springstudy.springmvc.chap04.mapper.BoardMapper;
+import com.study.springstudy.springmvc.chap05.ReplyMapper;
+import com.study.springstudy.springmvc.chap05.entity.Reply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,13 @@ import java.util.stream.Collectors;
 @Service
 public class BoardService {
 
-    private final BoardMapper mapper;
+    // Service 는 여러개의 매퍼를 사용할 수 있다.
+    private final BoardMapper boardMapper;
+    private final ReplyMapper replyMapper;
 
     // 목록 조회 요청 중간처리
     public List<BoardListResponseDto> findList(Page page) {
-        List<BoardFindAlldto> boardList = mapper.findAll(page);
+        List<BoardFindAlldto> boardList = boardMapper.findAll(page);
 
         // 조회해온 게시물 리스트에서 각 게시물들의 조회수를 확인하여
         // 조회수가 5이상인 게시물에 특정 마킹
@@ -36,22 +40,29 @@ public class BoardService {
     // 등록 요청 중간처리
     public boolean insert(BoardWriteRequestDto dto) {
         Board b = dto.toEntity();
-        return mapper.save(b);
+        return boardMapper.save(b);
     }
 
     // 삭제 요청 중간처리
     public boolean remove(int boardNo) {
-        return mapper.delete(boardNo);
+        return boardMapper.delete(boardNo);
     }
 
     // 상세 조회 요청 중간처리
     public BoardDetailResponseDto detail(int bno) {
-        Board b = mapper.findOne(bno);
-        if (b != null) mapper.upViewCount(bno);
-        return new BoardDetailResponseDto(b);
+        Board b = boardMapper.findOne(bno);
+        // 조회 할 때 마다 조회 수 올리기
+        if (b != null) boardMapper.upViewCount(bno);
+        // 댓글 목록 조회
+        List<Reply> replies = replyMapper.findAll(bno);
+
+        BoardDetailResponseDto responseDto = new BoardDetailResponseDto(b);
+        responseDto.setReplies(replies);
+
+        return responseDto;
     }
 
     public int getCount(Search search) {
-        return mapper.count(search);
+        return boardMapper.count(search);
     }
 }
