@@ -1,3 +1,5 @@
+SELECT * FROM spring5.tbl_board;
+
 truncate tbl_board;
 
 CREATE TABLE tbl_board (
@@ -21,6 +23,5 @@ SELECT COUNT(*)
 	
 SELECT * FROM tbl_board
 WHERE TITLE LIKE '%3%'
+	OR CONTENT LIKE '%3%'
 ORDER BY BOARD_NO DESC;
-
-

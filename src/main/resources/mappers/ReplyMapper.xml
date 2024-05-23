@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper파일은 실행할 SQL을 적는 파일 -->
+<!-- 생성한 mapper파일은 mybatis-config.xml에 사용등록을 해야함. -->
+
+<!-- namespace속성에는 사용할 인터페이스의 풀네임(패키지+인터페이스명)을 적음 -->
+<mapper namespace="com.study.springstudy.springmvc.chap05.ReplyMapper">
+
+    <!-- 댓글 등록-->
+    <insert id="save">
+        INSERT INTO tbl_reply
+            (reply_text, reply_writer, board_no)
+        VALUES (#{replyText}, #{replyWriter}, #{boardNo})
+    </insert>
+
+    <!-- 댓글 수정-->
+    <update id="modify">
+        UPDATE tbl_reply
+        SET reply_text = #{replyText}
+        WHERE reply_no = #{replyNo}
+    </update>
+
+    <!-- 댓글 삭제 -->
+    <delete id="delete">
+        DELETE FROM tbl_reply
+        WHERE reply_no = #{replyNo}
+    </delete>
+
+    <!-- 특정 게시물에 달린 댓글 목록 조회 (pk를 파라먼트로 받기) -->
+    <select id="findAll" resultType="reply">
+        SELECT * FROM tbl_reply
+        WHERE board_no = #{boardNo}
+        ORDER BY reply_no
+    </select>
+
+    <!-- 특정 게시물에 달린 총 댓글 수 조회 (pk를 파라먼트로 받기) -->
+    <select id="count" resultType="int">
+        SELECT * COUNT(*)
+        FROM tbl_reply
+        WHERE board_no = #{boardNo}
+    </select>
+</mapper>

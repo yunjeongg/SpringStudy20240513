@@ -33,9 +33,23 @@
     </sql>
 
     <!-- 동적SQL SQL이 실시간으로 바뀜 -->
-    <select id="findAll" resultType="board">
-        SELECT * FROM tbl_board
+    <select id="findAll" resultType="com.study.springstudy.springmvc.chap04.dto.BoardFindAlldto">
+        SELECT
+        <!-- 조회하는 데이터를 담을 dto 필요 -->
+        B.board_no,
+        B.title,
+        B.content,
+        B.writer,
+        B.reg_date_time,
+        B.view_count,
+        COUNT(R.reply_no) AS reply_count
+        FROM tbl_board B
+        <!-- inner join 으로 했을 경우 댓글이 1개도 없으면 안됨 -->
+        LEFT OUTER JOIN tbl_reply R
+        ON B.board_no = R.board_no
+        <!-- include = where, group by 가 include 아래로 가야함 -->
         <include refid="search" />
+        GROUP BY B.board_no
         ORDER BY board_no DESC
         LIMIT #{pageStart}, #{amount}
     </select>
