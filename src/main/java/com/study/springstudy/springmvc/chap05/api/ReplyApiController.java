@@ -19,6 +19,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/replies")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin // CORS 정책 허용범위 설정
 public class ReplyApiController {
 
     private final ReplyService replyService;
@@ -89,6 +90,17 @@ public class ReplyApiController {
         }
 
         return errors;
+    }
+
+    // 삭제 처리 요청
+    @DeleteMapping("/{rno}") // 삭제요청(삭제할 글번호 url)
+    public ResponseEntity<?> delete(@PathVariable long rno){ // url읽기위해 @PathVariable 붙이기
+
+        List<ReplyDetailDto> dtoList = replyService.remove(rno);
+
+        return ResponseEntity
+                .ok()
+                .body(dtoList);
     }
 
 }

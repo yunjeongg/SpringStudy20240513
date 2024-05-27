@@ -7,7 +7,9 @@ import com.study.springstudy.springmvc.chap05.mapper.ReplyMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ReplyService {
+
+    // 컨트롤러에게 명령받은 내용의 중간처리
 
     private final ReplyMapper replyMapper;
 
@@ -45,6 +49,16 @@ public class ReplyService {
     public void modify(){}
 
     // 댓글 삭제
-    public void delete(){}
+    @Transactional // 트랜잭션으로 묶기
+    public List<ReplyDetailDto> remove(long rno){
+        // 댓글번호로 원본 글번호 찾기
+        long bno = replyMapper.findBno(rno);
+
+        // DB에 댓글 삭제명령
+        boolean flag = replyMapper.delete(rno);
+
+        // 삭제 후 삭제된 목록을 리턴
+        return flag ? getReplies(bno) : Collections.emptyList();
+    }
 
 }

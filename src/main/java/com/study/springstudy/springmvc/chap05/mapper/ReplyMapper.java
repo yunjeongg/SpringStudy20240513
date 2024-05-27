@@ -23,5 +23,6 @@ public interface ReplyMapper {
     // 특정 게시물에 달린 총 댓글 수 조회 (pk를 파라먼트로 받기)
     int count (long boardNo);
 
-
+    // 댓글번호로 원본글번호 찾기
+    long findBno(long rno);
 }

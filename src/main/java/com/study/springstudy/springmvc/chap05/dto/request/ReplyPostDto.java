@@ -16,6 +16,15 @@ public class ReplyPostDto {
 
     // 클라이언트에서 서버로 오는 데이터를 받고, 검증
 
+    // json
+    /*
+    {
+    "text": "검증 댓글",
+    "author": "검증맨",
+    "bno": 101
+    }
+     */
+
     @NotBlank // - null, 빈문자 둘 다 안됨
     // @NotNull - null 안됨 // @NotEmpty - null은 되는데 빈문자는 안됨
     @Size(min = 1, max = 300) // - 최소 1글자에서 300글자까지 작성
