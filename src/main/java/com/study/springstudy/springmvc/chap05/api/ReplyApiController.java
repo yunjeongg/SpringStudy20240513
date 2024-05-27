@@ -6,9 +6,14 @@ import com.study.springstudy.springmvc.chap05.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/replies")
@@ -46,10 +51,20 @@ public class ReplyApiController {
     // @RequestBody : 클라이언트가 전송한 데이터를 JSON으로 받아서 파싱
     // http://localhost:8383/api/v1/replies
     @PostMapping
-    public ResponseEntity<?> posts(@RequestBody ReplyPostDto dto) {
+    public ResponseEntity<?> posts(@Validated @RequestBody ReplyPostDto dto, BindingResult result) {
+        // @Validated 검증됨
+        // BindingResult - 입력값 검증 결과 데이터를 갖고 있는 객체
 
         log.info("/api/v1/replies : POST");
         log.debug("parameter: {}", dto);
+
+        // 에러가 났을 때 400 메세지만 보내는 것이 아닌 정확이 어디서 문제가 났는지까지도 클라이언트에게 전달해줘야 한다.
+        if (result.hasErrors()) {
+
+            Map<String, String> errors = makeValidationMessageMap (result);
+
+            return ResponseEntity.badRequest().body(errors);
+        };
 
         boolean flag = replyService.register(dto);
 
@@ -60,6 +75,20 @@ public class ReplyApiController {
         return ResponseEntity
                 .ok()
                 .body(replyService.getReplies(dto.getBno()));
+    }
+
+    private Map<String, String> makeValidationMessageMap(BindingResult result) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        // 에러정보가 모여있는 리스트
+        List<FieldError> fieldErrors = result.getFieldErrors();
+
+        for (FieldError error : fieldErrors) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+
+        return errors;
     }
 
 }

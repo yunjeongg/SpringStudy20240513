@@ -13,6 +13,11 @@ import java.time.LocalDateTime;
 @Builder
 public class ReplyDetailDto {
 
+    // 서버에서 클라이언트로 보내는 데이터를 클라이언트의 입맛에 맞게 변환
+
+    // 클라이언트가 rno를 reply_no 로 바꿔달라고 했을 때
+    // rno를 클라이언트의 요구에 맞게 reply_no 라고 바꿔줄 수도 있지만
+    // 그럼 수정해야 할 부분이 있기 때문에 @JsonProperty("reply_no")로 해줘도 된다.
     private long rno;
     private String text;
     private String writer;
