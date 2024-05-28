@@ -41,7 +41,8 @@ public class ReplyApiController {
         log.info("/api/v1/replies/{} : GET", bno);
 
         List<ReplyDetailDto> replies = replyService.getReplies(bno);
-        log.debug("first reply : {}", replies.get(0));
+        // 댓글 하나도 없을 때 에러남
+//        log.debug("first reply : {}", replies.get(0));
 
         return ResponseEntity
                 .ok()

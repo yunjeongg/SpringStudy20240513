@@ -1,6 +1,5 @@
 package com.study.springstudy.springmvc.chap05.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.study.springstudy.springmvc.chap05.entity.Reply;
 import lombok.*;
 
@@ -21,7 +20,8 @@ public class ReplyDetailDto {
     private long rno;
     private String text;
     private String writer;
-    @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm")
+//    @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm")
+// 포맷을 바꾸면 날짜가 문자열로 바뀌기 때문에 만약 클라이언트에서 날짜에 또 다른 날짜 효과를 주면 NaN이 뜸.
     private LocalDateTime createAt;
 
     // 엔터티를 DTO 로 변환하는 생성자
