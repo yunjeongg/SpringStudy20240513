@@ -41,8 +41,8 @@ public class ReplyApiController {
 
         log.info("/api/v1/replies/{} : GET", bno);
 
-        // 한 페이지에 댓글 5개 표시
-        ReplyListDto replies = replyService.getReplies(bno, new Page(pageNo, 5));
+        // 한 페이지에 댓글 10개 표시
+        ReplyListDto replies = replyService.getReplies(bno, new Page(pageNo, 10));
         // 댓글 하나도 없을 때 에러남
 //        log.debug("first reply : {}", replies.get(0));
 

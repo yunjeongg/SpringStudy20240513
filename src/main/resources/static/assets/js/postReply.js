@@ -1,11 +1,12 @@
+
 import { BASE_URL } from "./reply.js";
-import { renderReplies } from "./getReply.js";
+import { fetchInfScrollReplies } from "./getReply.js";
 
 // 서버에 댓글 등록을 요청하는 비동기 함수
 export const fetchReplyPost = async () => {
 
   const textInput = document.getElementById('newReplyText');
-  const writerInput =document.getElementById('newReplyWriter');
+  const writerInput = document.getElementById('newReplyWriter');
 
   // 서버로 보낼 데이터
   const payload = {
@@ -25,12 +26,11 @@ export const fetchReplyPost = async () => {
 
   const replies = await res.json();
 
-  console.log(replies);
-
-  // 렌더링 하기 전 입력창 비우기
   textInput.value = '';
   writerInput.value = '';
-  
-  // 렌더링
-  renderReplies(replies);
+
+  // console.log(replies);
+  // renderReplies(replies);
+  fetchInfScrollReplies();
+  window.scrollTo(0, 0); // 입력 후 페이지 상단으로 이동
 };

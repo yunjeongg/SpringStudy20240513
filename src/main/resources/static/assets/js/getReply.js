@@ -139,7 +139,9 @@ function appendReplies({ replies }) {
   // 댓글 목록 렌더링
   let tag = '';
   if (replies && replies.length > 0) {
-    replies.forEach(({ reply_no: rno, writer, text, createAt }) => {
+    // replies.forEach(({ reply_no: rno, writer, text, createAt })
+    // 만약 서버가 reply_no 라고 줬는데 클라이언트에서 rno로 바꾸고 싶을 때 이런식으로 문법을 사용할 수도 있다.
+    replies.forEach(({ rno, writer, text, createAt }) => {
       tag += `
         <div id='replyContent' class='card-body' data-reply-id='${rno}'>
             <div class='row user-block'>
@@ -198,6 +200,9 @@ export async function fetchInfScrollReplies(pageNo=1) {
 
     // 초기 댓글 reset
     document.getElementById('replyData').innerHTML = '';
+
+    // 무한스크롤 실행
+    setupInfiniteScroll();
   }
 
   // 댓글 목록 렌더링
