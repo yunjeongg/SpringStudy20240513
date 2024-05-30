@@ -92,6 +92,10 @@
     </style>
 </head>
 <body>
+
+<!-- 통합 css -->
+<%@ include file ="../include/header.jsp" %>
+
 <div id="wrap" class="form-container">
     <h1>꾸러기 게시판 글쓰기</h1>
     <form action="/board/write" method="post">
