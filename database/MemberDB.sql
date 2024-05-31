@@ -1,5 +1,7 @@
 SELECT * FROM spring5.tbl_member;
 
+DROP TABLE tbl_member; -- 댓글테이블 구조까지 삭제
+
 -- 회원 관리 테이블
 CREATE TABLE tbl_member (
     account VARCHAR(50),
@@ -12,3 +14,10 @@ CREATE TABLE tbl_member (
     
     -- 가입시 account, password, name, email 입력해야 한다.
 );
+
+-- account admin을 관리자로 설정!
+UPDATE tbl_member
+SET auth = 'ADMIN'
+WHERE account = 'admin';
+
+commit;
