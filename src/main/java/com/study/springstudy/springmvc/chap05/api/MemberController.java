@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/members")
 @Slf4j
@@ -60,11 +63,16 @@ public class MemberController {
 
     // 로그인 요청 처리
     @PostMapping("/sign-in")
-    public String signIn (LoginDto dto, RedirectAttributes ra) {
+    public String signIn(LoginDto dto,
+                         RedirectAttributes ra,
+                         HttpServletRequest request) {
         log.info("/members/sign-in POST");
         log.debug("parameter: {}", dto);
 
-        LoginResult result = memberService.authenticate(dto);
+        // 세션 얻기
+        HttpSession session = request.getSession();
+
+        LoginResult result = memberService.authenticate(dto, session);
 
         // 로그인 검증 결과를 JSP에게 보내기
         // Redirect시에 Redirect된 페이지에 데이터를 보낼 때는
@@ -74,14 +82,14 @@ public class MemberController {
         // 요청이 2번 발생하므로 다른 request객체를 jsp가 사용하게 됨
 
 //        model.addAttribute("result", result); // (X)
-
         ra.addFlashAttribute("result", result);
 
         if (result == LoginResult.SUCCESS) {
             return "redirect:/index"; // 로그인 성공시
         }
-        return "redirect:/members/sign-in"; // 실패시
+
+        return "redirect:/members/sign-in";
     }
 
-
 }
+
