@@ -4,9 +4,9 @@
     <html>
 
     <head>
-      <!-- 통합 css -->
-      <%@ include file ="../include/static-head.jsp" %>
 
+      <%@ include file="../include/static-head.jsp" %>
+      
       <link rel="stylesheet" href="/assets/css/list.css">
 
       <style>
@@ -19,16 +19,13 @@
 
     <body>
 
-      <!-- 통합 css -->
-      <%@ include file ="../include/header.jsp" %>
+      <%@ include file="../include/header.jsp" %>
 
       <div id="wrap">
 
         <div class="main-title-wrapper">
           <h1 class="main-title">꾸러기 게시판</h1>
-
           <button class="add-btn">새 글 쓰기</button>
-
         </div>
 
 
@@ -62,54 +59,56 @@
         </div>
 
         <div class="card-container">
+
           <c:if test="${bList.size() == 0}">
             <div class="empty">
-              검색한 게시물이 존재하지 않습니다.
+              검색한 게시물이 존재하지 않습니다!
             </div>
           </c:if>
 
           <c:if test="${bList.size() > 0}">
             <c:forEach var="b" items="${bList}">
-            <div class="card-wrapper">
-              <section class="card" data-bno="${b.bno}">
-                <div class="card-title-wrapper">
-                  <h2 class="card-title">${b.shortTitle} [${b.replyCount}]</h2>
-                  <div class="time-view-wrapper">
-                    <div class="time">
-                      <i class="far fa-clock"></i>
-                      ${b.date}
-                    </div>
+              <div class="card-wrapper">
+                <section class="card" data-bno="${b.bno}">
+                  <div class="card-title-wrapper">
+                    <h2 class="card-title">${b.shortTitle} [${b.replyCount}] </h2>
+                    <div class="time-view-wrapper">
+                      <div class="time">
+                        <i class="far fa-clock"></i>
+                        ${b.date}
+                      </div>
 
-                    <c:if test="${b.hit}">
-                      <div class="hit">HIT</div>
-                    </c:if>
+                      <c:if test="${b.hit}">
+                        <div class="hit">HIT</div>
+                      </c:if>
 
-                    <c:if test="${b.newArticle}">
-                      <div class="hit">NEW</div>
-                    </c:if>
+                      <c:if test="${b.newArticle}">
+                        <div class="hit">NEW</div>
+                      </c:if>
 
-                    <div class="view">
-                      <i class="fas fa-eye"></i>
-                      <span class="view-count">${b.view}</span>
+                      <div class="view">
+                        <i class="fas fa-eye"></i>
+                        <span class="view-count">${b.view}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="card-content">
-                  ${b.shortContent}
-                </div>
-              </section>
-              <!-- x버튼 영역 -->
-              <!-- 관리자이거나 본인이 쓴 글에만 렌더링되도록 변경하기 -->
-              <c:if test ="${login.auth == 'ADMIN' || login.account == b.account}">
-              <div class="card-btn-group">
-                <button class="del-btn" data-href="/board/delete?bno=${b.bno}">
-                  <i class="fas fa-times"></i>
-                </button>
+                  <div class="card-content">
+                    ${b.shortContent}
+                  </div>
+                </section>
+
+                <!-- 관리자이거나 본인이 쓴글에만 렌더링되도록 -->
+                <c:if test="${login.auth == 'ADMIN' || login.account == b.account}">
+                  <div class="card-btn-group">
+                    <button class="del-btn" data-href="/board/delete?bno=${b.bno}">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </c:if>
+
               </div>
-              </c:if>
-            </div>
-            <!-- end div.card-wrapper -->
-          </c:forEach>
+              <!-- end div.card-wrapper -->
+            </c:forEach>
           </c:if>
 
 
@@ -131,7 +130,8 @@
 
               <c:if test="${maker.prev}">
                 <li class="page-item">
-                  <a class="page-link" href="/board/list?pageNo=${maker.begin - 1}&type=${s.type}&keyword=${s.keyword}">prev</a>
+                  <a class="page-link"
+                    href="/board/list?pageNo=${maker.begin - 1}&type=${s.type}&keyword=${s.keyword}">prev</a>
                 </li>
               </c:if>
 
@@ -143,13 +143,15 @@
 
               <c:if test="${maker.next}">
                 <li class="page-item">
-                  <a class="page-link" href="/board/list?pageNo=${maker.end + 1}&type=${s.type}&keyword=${s.keyword}">next</a>
+                  <a class="page-link"
+                    href="/board/list?pageNo=${maker.end + 1}&type=${s.type}&keyword=${s.keyword}">next</a>
                 </li>
               </c:if>
 
               <c:if test="${maker.pageInfo.pageNo != maker.finalPage}">
                 <li class="page-item">
-                  <a class="page-link" href="/board/list?pageNo=${maker.finalPage}&type=${s.type}&keyword=${s.keyword}">&gt;&gt;</a>
+                  <a class="page-link"
+                    href="/board/list?pageNo=${maker.finalPage}&type=${s.type}&keyword=${s.keyword}">&gt;&gt;</a>
                 </li>
               </c:if>
 
@@ -239,7 +241,7 @@
           $targetCard?.classList.remove('card-hover');
 
           const $delBtn = e.target.closest('.card-wrapper')?.querySelector('.del-btn');
-          $delBtn.style.opacity = '0';
+          if ($delBtn) $delBtn.style.opacity = '0';
         }
 
 
@@ -252,7 +254,7 @@
           $targetCard?.classList.add('card-hover');
 
           const $delBtn = e.target.closest('.card-wrapper')?.querySelector('.del-btn');
-          $delBtn.style.opacity = '1';
+          if ($delBtn) $delBtn.style.opacity = '1';
         }
 
         $cardContainer.onmousedown = e => {
@@ -285,8 +287,6 @@
           const $li = document.querySelector(`.pagination li[data-page-num="\${currentPage}"]`);
 
           // 3. 해당 li태그에 class = active를 추가한다.
-          //    $li 가 있을 경우 active 클래스를 추가한다.
-          // if ($li) $li.classList.add('active');
           $li?.classList.add('active');
 
         }
@@ -302,8 +302,6 @@
           const $option = document.querySelector(`#search-type option[value='\${type}']`);
 
           // 3. 해당 태그에 selected 속성 부여
-          //    $option 이 null이 아니면 속성부여
-          // if ($option !== null ) $option.setAttribute('selected', 'selected');
           $option?.setAttribute('selected', 'selected');
         }
         appendActivePage();
