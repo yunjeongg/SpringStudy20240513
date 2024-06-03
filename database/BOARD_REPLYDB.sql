@@ -50,5 +50,10 @@ where board_no = 101;
 -- 게시글테이블과 댓글테이블에 회원 PK컬럼 추가
 ALTER TABLE tbl_reply
 ADD (account VARCHAR(50)); 
+
+-- 기존게시글 글쓴이 admin으로 변경
+UPDATE tbl_reply
+SET account = 'admin'
+WHERE account IS NULL;
     
     

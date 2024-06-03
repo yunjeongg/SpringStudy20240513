@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoginUSerInfoDto {
+public class LoginUserInfoDto {
 
     // 클라이언트에 보낼 정보
     private String account;
@@ -17,10 +17,10 @@ public class LoginUSerInfoDto {
     private String email;
     private String auth; // 권한
 
-    public LoginUSerInfoDto(Member member) {
+    public LoginUserInfoDto(Member member) {
         this.account = member.getAccount();
         this.nickName = member.getName();
         this.email = member.getEmail();
-        this.auth = member.getAuth().toString();
+        this.auth = member.getAuth().name();
     }
 }

@@ -42,7 +42,8 @@
         B.writer,
         B.reg_date_time,
         B.view_count,
-        COUNT(R.reply_no) AS reply_count
+        COUNT(R.reply_no) AS reply_count,
+        B.account
         FROM tbl_board B
         <!-- inner join 으로 했을 경우 댓글이 1개도 없으면 안됨 -->
         LEFT OUTER JOIN tbl_reply R

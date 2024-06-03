@@ -3,7 +3,6 @@ SELECT * FROM spring5.tbl_board;
 truncate tbl_board;
 
 CREATE TABLE tbl_board (
-
 	board_no INT(8) PRIMARY KEY auto_increment,
     title VARCHAR(200) NOT NULL,
     content TEXT,
@@ -49,18 +48,28 @@ from tbl_board A
 join tbl_board B
 on a.account = b.account;
 
-select 
-A.board_no,
-A.title,
-A.content,
-B.account as writer,
-A.view_count,
-A.account
-from tbl_board A
-join tbl_board B
-on A.account = B.account
-GROUP BY A.BOARD_NO;
-ORDER BY A.BOARD_NO DESC;
+SELECT 
+	B.board_no, B.title, M.name AS writer
+    , B.content, B.view_count
+    , B.reg_date_time, M.account 
+FROM tbl_board B
+LEFT OUTER JOIN tbl_member M
+ON B.account = M.account
+WHERE board_no = 100
+ORDER BY board_no DESC
+;
+
+-- writer 과 account 일치시키기
+SELECT 
+	B.board_no, B.title, M.name AS writer
+    , B.content, B.view_count
+    , B.reg_date_time, M.account 
+FROM tbl_board B
+LEFT OUTER JOIN tbl_member M
+ON B.account = M.account
+WHERE board_no = 100
+ORDER BY board_no DESC
+;
 
 
 

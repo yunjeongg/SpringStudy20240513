@@ -26,7 +26,7 @@
 
         <div class="main-title-wrapper">
           <h1 class="main-title">꾸러기 게시판</h1>
-          
+
           <button class="add-btn">새 글 쓰기</button>
 
         </div>
@@ -98,11 +98,15 @@
                   ${b.shortContent}
                 </div>
               </section>
+              <!-- x버튼 영역 -->
+              <!-- 관리자이거나 본인이 쓴 글에만 렌더링되도록 변경하기 -->
+              <c:if test ="${login.auth == 'ADMIN' || login.account == b.account}">
               <div class="card-btn-group">
                 <button class="del-btn" data-href="/board/delete?bno=${b.bno}">
                   <i class="fas fa-times"></i>
                 </button>
               </div>
+              </c:if>
             </div>
             <!-- end div.card-wrapper -->
           </c:forEach>
