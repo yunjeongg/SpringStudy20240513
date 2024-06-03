@@ -28,7 +28,7 @@ public class BoardListResponseDto {
 
 
     // 엔터티를 DTO로 변환하는 생성자
-    public BoardListResponseDto(BoardFindAlldto b) {
+    public BoardListResponseDto(BoardFindAllDto b) {
         this.bno = (int)b.getBoardNo();
         this.shortTitle = makeShortTitle(b.getTitle());
         this.shortContent = makeShortContent(b.getContent());

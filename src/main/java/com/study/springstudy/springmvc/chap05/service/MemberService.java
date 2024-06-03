@@ -20,8 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 import static com.study.springstudy.springmvc.chap05.service.LoginResult.*;
-import static com.study.springstudy.springmvc.util.LoginUtil.AUTO_LOGIN_COOKIE;
-import static com.study.springstudy.springmvc.util.LoginUtil.LOGIN;
+import static com.study.springstudy.springmvc.util.LoginUtil.*;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +64,6 @@ public class MemberService {
             log.info("비밀번호가 일치하지 않습니다.");
             return NO_PW;
         }
-
 
         // 자동로그인 추가 처리
         if (dto.isAutoLogin()) {

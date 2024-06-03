@@ -33,7 +33,7 @@
     </sql>
 
     <!-- 동적SQL SQL이 실시간으로 바뀜 -->
-    <select id="findAll" resultType="com.study.springstudy.springmvc.chap04.dto.BoardFindAlldto">
+    <select id="findAll" resultType="com.study.springstudy.springmvc.chap04.dto.BoardFindAllDto">
         SELECT
         <!-- 조회하는 데이터를 담을 dto 필요 -->
         B.board_no,

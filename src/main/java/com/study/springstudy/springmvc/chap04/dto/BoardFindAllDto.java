@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardFindAlldto {
+public class BoardFindAllDto {
 
     private long boardNo;
     private String title;
