@@ -21,3 +21,15 @@ SET auth = 'ADMIN'
 WHERE account = 'admin';
 
 commit;
+
+-- 자동로그인 관련 컬럼 추가
+-- 쿠키에 저장한 값, 자동로그인 만료시간
+ALTER TABLE tbl_member
+ADD (session_id varchar(255) default 'none'); -- 자동로그인 했을 경우 랜덤 쿠키값 일단 none
+
+ALTER TABLE tbl_member
+ADD (limit_time DATETIME default current_timestamp); -- 자동로그인 됐을 경우 유지기간 - 90일
+
+SELECT * FROM spring5.tbl_member;
+
+ 
