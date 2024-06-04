@@ -12,8 +12,8 @@
     <!-- 댓글 등록-->
     <insert id="save">
         INSERT INTO tbl_reply
-            (reply_text, reply_writer, board_no)
-        VALUES (#{replyText}, #{replyWriter}, #{boardNo})
+            (reply_text, reply_writer, board_no, account)
+        VALUES (#{replyText}, #{replyWriter}, #{boardNo}, #{account})
     </insert>
 
     <!-- 댓글 수정-->

@@ -1,6 +1,7 @@
 
 import { BASE_URL } from "./reply.js";
 import { fetchInfScrollReplies } from "./getReply.js";
+import { callApi } from "./api.js";
 
 // 서버에 댓글 등록을 요청하는 비동기 함수
 export const fetchReplyPost = async () => {
@@ -16,21 +17,31 @@ export const fetchReplyPost = async () => {
   };
   console.log(payload);
 
-  const res = await fetch(`${BASE_URL}`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+  await callApi(BASE_URL, 'POST', payload);
 
-  const replies = await res.json();
+  // const res = await fetch(`${BASE_URL}`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'content-type': 'application/json'
+  //   },
+  //   body: JSON.stringify(payload)
+  // });
+
+  // // console.log('res:', res);
+  // if (res.status === 403) {
+  //   alert('로그인이 필요한 서비스입니다.');
+  //   window.location.href = '/members/sign-in';
+  //   return;
+  // }
+
+  // const replies = await res.json();
 
   textInput.value = '';
-  writerInput.value = '';
+  // 비회원일 때 댓글 작성하면 작성자 이름 날리기
+  // writerInput.value = '';
 
   // console.log(replies);
   // renderReplies(replies);
   fetchInfScrollReplies();
-  window.scrollTo(0, 0); // 입력 후 페이지 상단으로 이동
+  window.scrollTo(0, 0);
 };

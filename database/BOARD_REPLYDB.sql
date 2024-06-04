@@ -55,5 +55,12 @@ ADD (account VARCHAR(50));
 UPDATE tbl_reply
 SET account = 'admin'
 WHERE account IS NULL;
+
+-- 
+alter table tbl_reply
+add constraint fk_reply_member
+foreign key (account)
+references tbl_member(account)
+on delete cascade;
     
     
