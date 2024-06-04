@@ -23,6 +23,7 @@ public class ReplyDetailDto {
 //    @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm")
 // 포맷을 바꾸면 날짜가 문자열로 바뀌기 때문에 만약 클라이언트에서 날짜에 또 다른 날짜 효과를 주면 NaN이 뜸.
     private LocalDateTime createAt;
+    private String account; // 댓글 작성자 계정명
 
     // 엔터티를 DTO 로 변환하는 생성자
     public ReplyDetailDto (Reply r) {
@@ -30,5 +31,6 @@ public class ReplyDetailDto {
         this.text = r.getReplyText();
         this.writer = r.getReplyWriter();
         this.createAt = r.getReplyDate();
+        this.account = r.getAccount();
     }
 }

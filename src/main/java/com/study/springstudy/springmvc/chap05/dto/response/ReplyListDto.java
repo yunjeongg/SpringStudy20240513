@@ -30,6 +30,8 @@ public class ReplyListDto {
         ]
      */
 
+    @Setter
+    private LoginUserInfoDto loginUser;
     private PageMaker pageInfo; // 페이지를 계산해서 구조를 만들어놓은것
     private List<ReplyDetailDto> replies;
 

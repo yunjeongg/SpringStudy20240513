@@ -5,6 +5,7 @@ import com.study.springstudy.springmvc.chap05.dto.request.ReplyModifyDto;
 import com.study.springstudy.springmvc.chap05.dto.request.ReplyPostDto;
 import com.study.springstudy.springmvc.chap05.dto.response.ReplyListDto;
 import com.study.springstudy.springmvc.chap05.service.ReplyService;
+import com.study.springstudy.springmvc.util.LoginUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,6 @@ import java.util.Map;
 @RequestMapping("/api/v1/replies")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin // CORS 정책 허용범위 설정
 public class ReplyApiController {
 
     private final ReplyService replyService;
@@ -31,7 +31,11 @@ public class ReplyApiController {
     // URL : /api/v1/replies/원본글번호/page/페이지번호   -  GET -> 목록조회
     // @PathVariable : URL에 붙어있는 변수값을 읽는 아노테이션
     @GetMapping("/{bno}/page/{pageNo}")
-    public ResponseEntity<?> list(@PathVariable long bno, @PathVariable int pageNo) {
+    public ResponseEntity<?> list(
+            @PathVariable long bno
+            , @PathVariable int pageNo
+            , HttpSession session
+    ) {
 
         if (bno == 0) {
             String message = "글 번호는 0번이 될 수 없습니다.";
@@ -43,10 +47,8 @@ public class ReplyApiController {
 
         log.info("/api/v1/replies/{} : GET", bno);
 
-        // 한 페이지에 댓글 10개 표시
         ReplyListDto replies = replyService.getReplies(bno, new Page(pageNo, 10));
-        // 댓글 하나도 없을 때 에러남
-//        log.debug("first reply : {}", replies.get(0));
+        replies.setLoginUser(LoginUtil.getLoggedInUser(session));
 
         return ResponseEntity
                 .ok()
@@ -55,22 +57,22 @@ public class ReplyApiController {
 
     // 댓글 생성 요청
     // @RequestBody : 클라이언트가 전송한 데이터를 JSON으로 받아서 파싱
-    // http://localhost:8383/api/v1/replies
     @PostMapping
-    public ResponseEntity<?> posts(@Validated @RequestBody ReplyPostDto dto, BindingResult result, HttpSession session) {
-        // @Validated 검증됨
-        // BindingResult - 입력값 검증 결과 데이터를 갖고 있는 객체
-
+    public ResponseEntity<?> posts(
+            @Validated @RequestBody ReplyPostDto dto
+            , BindingResult result // 입력값 검증 결과 데이터를 갖고 있는 객체
+            , HttpSession session
+    ) {
         log.info("/api/v1/replies : POST");
         log.debug("parameter: {}", dto);
 
-        // 에러가 났을 때 400 메세지만 보내는 것이 아닌 정확이 어디서 문제가 났는지까지도 클라이언트에게 전달해줘야 한다.
         if (result.hasErrors()) {
+            Map<String, String> errors = makeValidationMessageMap(result);
 
-            Map<String, String> errors = makeValidationMessageMap (result);
-
-            return ResponseEntity.badRequest().body(errors);
-        };
+            return ResponseEntity
+                    .badRequest()
+                    .body(errors);
+        }
 
         boolean flag = replyService.register(dto, session);
 
@@ -98,8 +100,8 @@ public class ReplyApiController {
     }
 
     // 삭제 처리 요청
-    @DeleteMapping("/{rno}") // 삭제요청(삭제할 글번호 url)
-    public ResponseEntity<?> delete(@PathVariable long rno){ // url읽기위해 @PathVariable 붙이기
+    @DeleteMapping("/{rno}")
+    public ResponseEntity<?> delete(@PathVariable long rno) {
 
         ReplyListDto dtoList = replyService.remove(rno);
 
@@ -109,16 +111,16 @@ public class ReplyApiController {
     }
 
     // 댓글 수정 요청
-//    @PutMapping // 전체수정
+//    @PutMapping   // 전체수정
 //    @PatchMapping // 일부수정
 
     /*
-        const obj = {
-                        age: 3,
-                    }
+        let obj = {
+            age : 3
+        }
 
-        PUT - obj = {age:10}; // 객체 자체를 갈아끼움
-        PATCH - obj.age = 10; // 객체의 프로퍼티만 조작
+        PUT  -   obj = { age: 10 };
+        PATCH -  obj.age = 10;
      */
 
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH})
@@ -137,17 +139,11 @@ public class ReplyApiController {
                     .badRequest()
                     .body(errors);
         }
+
         ReplyListDto replyListDto = replyService.modify(dto);
 
         return ResponseEntity.ok().body(replyListDto);
 
-        /*
-        postman http://localhost:8383/api/v1/replies
-            {
-                "rno": 5005,
-                "newText": "댓글수정수정",
-                "bno": 101
-            }
-         */
     }
+
 }
