@@ -36,4 +36,7 @@ public class Member {
 
     private String sessionId;
     private LocalDateTime limitTime;
+
+    @Setter
+    private String profileImg;
 }

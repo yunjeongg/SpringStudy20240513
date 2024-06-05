@@ -8,6 +8,7 @@ import com.study.springstudy.springmvc.util.FileUtil;
 import com.study.springstudy.springmvc.util.LoginUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,10 @@ import javax.servlet.http.HttpSession;
 public class MemberController {
 
     // 첨부파일 업로드 경로
-    private String rootPath = "D:/spring-prj/upload";
+    //  @Value() 는 lombok이 아닌 spring 어노테이션을 적어줘야 한다.
+    // () 는 application.properties 에 적은 경로 이름 적기
+    @Value("${file.upload.root-path}")
+    private String rootPath;
 
     private final MemberService memberService;
 
@@ -47,10 +51,10 @@ public class MemberController {
         log.debug("parameter: {}", dto);
         log.debug("attached profile image name: {}", dto.getProfileImage().getOriginalFilename());
 
-        // 서버에 업로드
-        FileUtil.uploadFile(rootPath, dto.getProfileImage());
+        // 서버에 업로드 후 업로드 경로 반환
+        String profilePath = FileUtil.uploadFile(rootPath, dto.getProfileImage());
 
-        boolean flag = memberService.join(dto);
+        boolean flag = memberService.join(dto, profilePath);
 
         return flag ? "redirect:/members/sign-in" : "redirect:/members/sign-up";
     }
