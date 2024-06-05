@@ -30,10 +30,13 @@
     </delete>
 
     <!-- 특정 게시물에 달린 댓글 목록 조회 (pk를 파라먼트로 받기) -->
-    <select id="findAll" resultType="reply">
-        SELECT * FROM tbl_reply
-        WHERE board_no = #{bno}
-        ORDER BY reply_no
+    <select id="findAll" resultType="com.study.springstudy.springmvc.chap05.dto.response.ReplyFindAllDto">
+        SELECT R.*, M.profile_img
+        FROM tbl_reply R
+        LEFT JOIN tbl_member M
+        ON R.account = M.account
+        WHERE R.board_no = #{bno}
+        ORDER BY R.reply_no
         <!-- 페이지별 댓글개수 표시 제한 -->
         Limit #{p.pageStart}, #{p.amount}
     </select>

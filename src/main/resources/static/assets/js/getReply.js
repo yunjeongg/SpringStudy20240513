@@ -138,13 +138,21 @@ let loadedReplies = 0; // 로딩된 댓글 수
 function appendReplies({ replies, loginUser }) {
 
   // 댓글 목록 렌더링
+  // 프로필이 없으면 아래경로사진넣기, 문법 - 왼쪽이 true면 오른쪽
+  // <img class='reply-profile' src='${!profile && '/assets/img/anonymous.jpg'}' alt='profile image'>
+  // 또는 아래와 같이 쓸수도 있다.
+  // <img class='reply-profile' src='${profile ? profile : '/assets/img/anonymous.jpg'}' alt='profile image'>
+
   let tag = '';
   if (replies && replies.length > 0) {
-    replies.forEach(({ reply_no: rno, writer, text, createAt, account: replyAccount }) => { // 서버가 준 정보
+    replies.forEach(({ reply_no: rno, writer, text, createAt, account: replyAccount, profile }) => {
       tag += `
         <div id='replyContent' class='card-body' data-reply-id='${rno}'>
             <div class='row user-block'>
                 <span class='col-md-3'>
+
+                    <img class='reply-profile' src='${profile ? profile : '/assets/img/anonymous.jpg'}' alt='profile image'>
+
                     <b>${writer}</b>
                 </span>
                 <span class='offset-md-6 col-md-3 text-right'><b>${getRelativeTime(
@@ -155,8 +163,9 @@ function appendReplies({ replies, loginUser }) {
                 <div class='col-md-9'>${text}</div>
                 <div class='col-md-3 text-right'>
                 `;
-          // 관리자이거나 내가 쓴 댓글일 경우만 조건부 렌더링
-          // 로그인한 회원의 권한, 로그인한 회원의 계정명, 해당 댓글의 계정명
+
+      // 관리자이거나 내가 쓴 댓글일 경우만 조건부 렌더링
+      // 로그인한 회원 권한, 로그인한 회원 계정명, 해당 댓글의 계정명
           if (loginUser) {
           const { auth, account: loginUserAccount } = loginUser;
 
